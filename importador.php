@@ -1,7 +1,6 @@
 <?php
 
-if (isset($_POST["import"])) {
-    
+if (isset($_POST)) {
     $fileName = $_FILES["file"]["tmp_name"];
     $host = $_POST['host'];
 	$database = $_POST['database'];
@@ -30,7 +29,8 @@ if (isset($_POST["import"])) {
 		$sqlInsert = "INSERT INTO `".$table."` (".$colunasString.")
 			VALUES (".$interrogString.");";
 		
-        while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
+        while (($column = fgetcsv($file, 100000, ";")) !== FALSE) {
+			var_dump($column);
 			$paramArray = array();
 			
             foreach($column as $indice => $coluna){
@@ -41,7 +41,7 @@ if (isset($_POST["import"])) {
             
             if ($stmt->execute($paramArray)) {
                 $type = "success";
-                $message = "Dados CSV importados into na base de dados.";
+                $message = "Dados CSV importados na base de dados.";
             } else {
                 $type = "danger";
                 $message = "Problema importando dados CSV.";
