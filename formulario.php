@@ -10,7 +10,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="css/app.css" />
 	<script type="text/javascript">
-		/*$(document).ready(function() {
+		$(document).ready(function() {
 			$("#frmCSVImport").on("submit", function () {
 
 				$("#response").attr("class", "");
@@ -25,11 +25,18 @@
 				}
 				return true;
 			});
-		});*/
+
+			$("#primeiraLinha").toggle(function(){
+				alert($(this).val());
+				$("input [name='colunas[]']").prop("disabled", true);
+			});
+		});
 
 		function adicionarColuna(){
 			$("#colunas").append("<input class=\"form-control m-1\" type=\"text\" name=\"colunas[]\">");
 		}
+
+
 	</script>
 </head>
 <body>
@@ -64,13 +71,21 @@
 							</div>
 						</div>
 						<div class="row form-group">
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<label class="control-label h5">Nome da base de dados</label><br>
 								<input class="form-control" type="text" name="database" id="database">
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<label class="control-label h5">Nome da tabela</label><br>
 								<input class="form-control" type="text" name="table" id="table">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" name="primeiraLinha" id="primeiraLinha">
+									<label class="control-label" for="primeiraLinha">Usar a primeira linha do documento .csv para definir as colunas</label>
+								</div>
 							</div>
 							<div class="col-sm-4">
 								<label class="control-label h5">Colunas</label><br>
@@ -78,6 +93,21 @@
 									<input class="form-control m-1" type="text" name="colunas[]">
 								</div>
 								<a id="adicionarColuna" onclick="adicionarColuna();"><i class="fa fa-plus"></i></a>
+							</div>
+							<div class="col-sm-4">
+								<h5 class="h5">Caractere separador de valores</h5>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=";" checked>
+									<label class="control-label" for="separador">;</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=",">
+									<label class="control-label" for="separador">,</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="separador[]" id="separador" value="/">
+									<label class="control-label" for="separador">/</label>
+								</div>
 							</div>
 						</div>
 						<br>

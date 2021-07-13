@@ -7,17 +7,25 @@ if (isset($_POST)) {
 	$table = $_POST['table'];
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$colunas = $_POST['colunas'];
+	$separador = $_POST['separador'];
+
+	if(isset($_POST['primeiraLinha']) && $_POST['primeiraLinha'] == true){
+		$file = fopen($fileName, "r");
+		$colunasArray = fgetcsv($file, 1, $separador);
+		$interrogArray = array_fill(0, count($colunasArray), "?");
+	}else{
+		$colunas = $_POST['colunas'];
+
+		$colunasArray = array();
+		$interrogArray = array();
+		
+		foreach($colunas as $chave => $coluna){
+			$colunasArray = array_merge($colunasArray, [$chave => "`".$coluna."`"]);
+			$interrogArray = array_merge($interrogArray, [$chave => "?"]);
+		}
+	}
 
 	$conn = mysqli_connect($host, $username, $password, $database);
-	
-	$colunasArray = array();
-	$interrogArray = array();
-	
-	foreach($colunas as $chave => $coluna){
-		$colunasArray = array_merge($colunasArray, [$chave => "`".$coluna."`"]);
-		$interrogArray = array_merge($interrogArray, [$chave => "?"]);
-	}
 	
 	$colunasString = implode(',', $colunasArray);
 	$interrogString = implode(',', $interrogArray);
@@ -29,8 +37,8 @@ if (isset($_POST)) {
 		$sqlInsert = "INSERT INTO `".$table."` (".$colunasString.")
 			VALUES (".$interrogString.");";
 		
-        while (($column = fgetcsv($file, 100000, ";")) !== FALSE) {
-			var_dump($column);
+        while (($column = fgetcsv($file, 1000, $separador)) !== FALSE) {
+			
 			$paramArray = array();
 			
             foreach($column as $indice => $coluna){
