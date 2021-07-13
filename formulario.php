@@ -26,14 +26,13 @@
 				return true;
 			});
 
-			$("#primeiraLinha").toggle(function(){
-				alert($(this).val());
-				$("input [name='colunas[]']").prop("disabled", true);
+			$("#primeiraLinha").change(function(){
+				$(".colunas").prop("disabled", $(this).is(":checked"));
 			});
 		});
 
 		function adicionarColuna(){
-			$("#colunas").append("<input class=\"form-control m-1\" type=\"text\" name=\"colunas[]\">");
+			$("#colunas").append("<input class=\"form-control m-1 colunas\" type=\"text\" name=\"colunas[]\">");
 		}
 
 
@@ -90,14 +89,14 @@
 							<div class="col-sm-4">
 								<label class="control-label h5">Colunas</label><br>
 								<div class="border p-2" id="colunas">
-									<input class="form-control m-1" type="text" name="colunas[]">
+									<input class="form-control m-1 colunas" type="text" name="colunas[]">
 								</div>
 								<a id="adicionarColuna" onclick="adicionarColuna();"><i class="fa fa-plus"></i></a>
 							</div>
 							<div class="col-sm-4">
 								<h5 class="h5">Caractere separador de valores</h5>
 								<div class="form-check">
-									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=";" checked>
+									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=";">
 									<label class="control-label" for="separador">;</label>
 								</div>
 								<div class="form-check">

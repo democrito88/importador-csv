@@ -7,11 +7,11 @@ if (isset($_POST)) {
 	$table = $_POST['table'];
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$separador = $_POST['separador'];
+	$separador = $_POST['separador'][0];
 
 	if(isset($_POST['primeiraLinha']) && $_POST['primeiraLinha'] == true){
 		$file = fopen($fileName, "r");
-		$colunasArray = fgetcsv($file, 1, $separador);
+		$colunasArray = fgetcsv($file, 10000, $separador);
 		$interrogArray = array_fill(0, count($colunasArray), "?");
 	}else{
 		$colunas = $_POST['colunas'];
@@ -24,7 +24,7 @@ if (isset($_POST)) {
 			$interrogArray = array_merge($interrogArray, [$chave => "?"]);
 		}
 	}
-
+	
 	$conn = mysqli_connect($host, $username, $password, $database);
 	
 	$colunasString = implode(',', $colunasArray);
