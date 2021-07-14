@@ -58,11 +58,11 @@
 						<div class="row form-group">
 							<div class="col-sm-4">
 								<label class="control-label h5">Host</label><br>
-								<input class="form-control" type="text" name="host" id="host">
+								<input class="form-control" type="text" name="host" id="host" value="localhost">
 							</div>
 							<div class="col-sm-4">
 								<label class="control-label h5">Nome de usuário</label><br>
-								<input class="form-control" type="text" name="username" id="username">
+								<input class="form-control" type="text" name="username" id="username" value="phpmyadmin">
 							</div>
 							<div class="col-sm-4">
 								<label class="control-label h5">Senha</label><br>
@@ -72,11 +72,11 @@
 						<div class="row form-group">
 							<div class="col-sm-6">
 								<label class="control-label h5">Nome da base de dados</label><br>
-								<input class="form-control" type="text" name="database" id="database">
+								<input class="form-control" type="text" name="database" id="database" value="noticacoesteste">
 							</div>
 							<div class="col-sm-6">
 								<label class="control-label h5">Nome da tabela</label><br>
-								<input class="form-control" type="text" name="table" id="table">
+								<input class="form-control" type="text" name="table" id="table" value="notificacoes">
 							</div>
 						</div>
 						<div class="row">
@@ -97,15 +97,19 @@
 								<h5 class="h5">Caractere separador de valores</h5>
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=";">
-									<label class="control-label" for="separador">;</label>
+									<label class="control-label" for="separador">";"</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=",">
-									<label class="control-label" for="separador">,</label>
+									<label class="control-label" for="separador">","</label>
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="radio" name="separador[]" id="separador" value="/">
-									<label class="control-label" for="separador">/</label>
+									<input class="form-check-input" type="radio" name="separador[]" id="separador" value=" ">
+									<label class="control-label" for="separador">Espaço</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="separador[]" id="separador" value="	">
+									<label class="control-label" for="separador">Tabulação</label>
 								</div>
 							</div>
 						</div>
