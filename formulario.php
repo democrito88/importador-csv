@@ -104,7 +104,7 @@
 							</div>
 							<div class="col-sm-6">
 								<input class="form-check-input" type="checkbox" name="criarTabela" id="criarTabela">
-								<label class="control-label h5" for="criarTabela">Criar tabela na base dados caso não exista</label>
+								<label class="control-label h5" for="criarTabela">Criar tabela na base de dados caso não exista</label>
 							</div>
 						</div>
 						<br>

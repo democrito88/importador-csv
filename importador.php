@@ -13,6 +13,8 @@ function validateDate($date, $format = 'Y-m-d'){
 }
 
 if (isset($_POST)) {
+	$message = "";
+	$sqlInsert = "";
     $fileName = $_FILES["file"]["tmp_name"];
     $host = $_POST['host'];
 	$database = $_POST['database'];
@@ -39,6 +41,24 @@ if (isset($_POST)) {
 			$interrogArray = array_merge($interrogArray, [$chave => "?"]);
 		}
 	}
+
+	//cria a base dedados se for solicitado
+	if($_POST['criarDatabase']){
+		$conn = new mysqli($host, $username, $password);
+		$sqlInsert .= "CREATE DATABASE IF NOT EXISTS `".$database."` "
+		."DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; ";
+
+		if ($conn->query($sqlInsert) === TRUE) {
+			$message .= "Base de dados criada com sucesso! ";
+			echo $message;
+		} else {
+			$message .= "Erro ao criar a base de dados: " . $conn->error." ";
+			echo $message;
+		}
+	}
+
+	//limpa o valor da string
+	$sqlInsert = "";
 	
 	$conn = mysqli_connect($host, $username, $password, $database);
 	
@@ -48,14 +68,8 @@ if (isset($_POST)) {
     if ($_FILES["file"]["size"] > 0) {
 		$file = fopen($fileName, "r");
 		$pdo = new PDO("mysql:host=".$host.";dbname=".$database, ''.$username, ''.$password);
-		$sqlInsert = "";
-
-		if($_POST['criarDatabase']){
-			$sqlInsert .= "CREATE DATABASE IF NOT EXISTS `".$databaseName."` "
-			."DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; "
-			."USE `".$databaseName."`; ";
-		}
 		
+		//cria a tabela caso não exista
 		if($_POST['criarTabela']){
 			$sqlInsert .= "CREATE TABLE IF NOT EXISTS `".$table."` (";
 		
@@ -97,16 +111,16 @@ if (isset($_POST)) {
 			
 			if ($stmt->execute($paramArray)) {
 				$type = "success";
-				$message = "Dados CSV importados na base de dados.";
+				$message .= "Dados CSV importados na base de dados. ";
 			} else {
 				$type = "danger";
-				$message = "Problema importando dados CSV: ".$stmt->errorInfo()[2];
+				$message .= "Problema importando dados CSV: ".$stmt->errorInfo()[2];
 			}
 		}
 
     }else{
 		$type = "danger";
-		$message = "O arquivo .csv está vazio.";
+		$message .= "O arquivo .csv está vazio. ";
 	}
 	header("Location: formulario.php?message=".$message."&type=".$type);
 }
