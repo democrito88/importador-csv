@@ -1,0 +1,39 @@
+{
+	"string": [
+		"CHAR",
+		"VARCHAR(255)",
+		"BINARY",
+		"VARBINARY(255)",
+		"TINYBLOB",
+		"TINYTEXT",
+		"TEXT",
+		"BLOB",
+		"MEDIUMTEXT",
+		"MEDIUMBLOB",
+		"LONGTEXT",
+		"LONGBLOB"
+	],
+	"numeros":[
+		"BIT(64)",
+		"TINYINT(255)",
+		"BOOL",
+		"BOOLEAN",
+		"SMALLINT(255)",
+		"MEDIUMINT(255)",
+		"INT(255)",
+		"INTEGER(255)",
+		"BIGINT(255)",
+		"FLOAT",
+		"DOUBLE",
+		"DOUBLE PRECISION",
+		"DECIMAL",
+		"DEC"
+	],
+	"tempo":[
+		"DATE",
+		"DATETIME",
+		"TIMESTAMP",
+		"TIME",
+		"YEAR"
+	]
+}

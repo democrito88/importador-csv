@@ -1,4 +1,5 @@
 <?php
+//Desenvolvido por Demócrito d'Anunciação democrito@olinda.pe.gov.br
 function validateDate($date, $format = 'Y-m-d'){
 	if(strlen($date) == 24){
 		//formata a data
@@ -26,12 +27,15 @@ if (isset($_POST)) {
 		$interrogArray = array_fill(0, count($colunasArray), "?");
 	}else{
 		$colunas = $_POST['colunas'];
+		$tiposColunas = $_POST['tipos'];
 
 		$colunasArray = array();
+		$tiposColunasArray = array();
 		$interrogArray = array();
 		
 		foreach($colunas as $chave => $coluna){
 			$colunasArray = array_merge($colunasArray, [$chave => "`".$coluna."`"]);
+			$tiposColunasArray = array_merge($tiposColunasArray, [$chave => "`".$tiposColunas[$chave]."`"]);
 			$interrogArray = array_merge($interrogArray, [$chave => "?"]);
 		}
 	}
@@ -44,8 +48,25 @@ if (isset($_POST)) {
     if ($_FILES["file"]["size"] > 0) {
 		$file = fopen($fileName, "r");
 		$pdo = new PDO("mysql:host=".$host.";dbname=".$database, ''.$username, ''.$password);
-		$sqlInsert = "INSERT INTO `".$table."` (".$colunasString.")
-			VALUES (".$interrogString.");";
+		$sqlInsert = "";
+
+		if($_POST['criarDatabase']){
+			$sqlInsert .= "CREATE DATABASE IF NOT EXISTS `".$databaseName."` "
+			."DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci; "
+			."USE `".$databaseName."`; ";
+		}
+		
+		if($_POST['criarTabela']){
+			$sqlInsert .= "CREATE TABLE IF NOT EXISTS `".$table."` (";
+		
+			foreach($colunasArray as $indice => $coluna){
+				$sqlInsert .= " ".$coluna." ".$tiposColunas[$indice]." DEFAULT NULL".($indice + 1 == count($colunasArray) ? " " : ", ");
+			}
+
+			$sqlInsert .=   ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4; ";
+			$sqlInsert .= "INSERT INTO `".$table."` (".$colunasString.")
+				VALUES (".$interrogString."); ";
+		}
 		
 		$i = 0;
 

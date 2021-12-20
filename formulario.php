@@ -1,15 +1,19 @@
-<!doctype>
+<!DOCTYPE>
 <html>
 <head>
+	<!-- Desenvolvido por Demócrito d'Anunciação democrito@olinda.pe.gov.br -->
 	<title>Importar CSV</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/app.css" />
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico">
 	<script type="text/javascript">
+		var tipos = "";
+
 		$(document).ready(function() {
 			$("#frmCSVImport").on("submit", function () {
 
@@ -29,13 +33,27 @@
 			$("#primeiraLinha").change(function(){
 				$(".colunas").prop("disabled", $(this).is(":checked"));
 			});
+			
 		});
 
 		function adicionarColuna(){
-			$("#colunas").append("<input class=\"form-control m-1 colunas\" type=\"text\" name=\"colunas[]\">");
+			$("#colunas").append("<div class=\"row\"><div class=\"col-sm-6\">"
+									+"<input class=\"form-control m-1 colunas\" type=\"text\" name=\"colunas[]\">"
+								+"</div>"
+								+"<div class=\"col-sm-6\">"
+									+"<select class='form-select' name='tipos[]'>"
+								<?php 
+									foreach(json_decode(file_get_contents("json/tipos.json"), true) as $indice => $tipos){
+										echo "+\"<optgroup label='".$indice."'>\"";
+										foreach($tipos as $tipo){
+											echo "+\"<option value='".$tipo."'>".$tipo."</option>\"";
+										}
+										echo "+\"</optgroup>\"";
+									}
+								?>
+									+"</select>"
+								+"</div></div>");
 		}
-
-
 	</script>
 </head>
 <body>
@@ -79,19 +97,58 @@
 								<input class="form-control" type="text" name="table" id="table" value="notificacoes">
 							</div>
 						</div>
-						<div class="row">
+						<div class="row form-group">
+							<div class="col-sm-6">
+								<input class="form-check-input" type="checkbox" name="criarDatabase" id="criarDatabase">
+								<label class="control-label h5" for="criarDatabase">Criar base de dados caso não exista</label>
+							</div>
+							<div class="col-sm-6">
+								<input class="form-check-input" type="checkbox" name="criarTabela" id="criarTabela">
+								<label class="control-label h5" for="criarTabela">Criar tabela na base dados caso não exista</label>
+							</div>
+						</div>
+						<br>
+						<hr>
+						<br>
+						<div class="row form-group">
 							<div class="col-sm-4">
 								<div class="form-check">
 									<input class="form-check-input" type="checkbox" name="primeiraLinha" id="primeiraLinha">
 									<label class="control-label" for="primeiraLinha">Usar a primeira linha do documento .csv para definir as colunas</label>
 								</div>
 							</div>
-							<div class="col-sm-4">
+							<div class="col-sm-8">
 								<label class="control-label h5">Colunas</label><br>
 								<div class="border p-2" id="colunas">
-									<input class="form-control m-1 colunas" type="text" name="colunas[]">
+									<div class="row">
+										<div class="col-sm-6">
+											<input class="form-control m-1 colunas" type="text" name="colunas[]">
+										</div>
+										<div class="col-sm-6">
+											<select class="form-select" name="tipos[]">
+												<?php 
+												foreach(json_decode(file_get_contents("json/tipos.json"), true) as $indice => $tipos){
+													echo "<optgroup label='".$indice."'>";
+													foreach($tipos as $tipo){
+														echo "<option value='".$tipo."'>".$tipo."</option>";
+													}
+													echo "</optgroup>";
+												}
+												?>
+											</select>
+										</div>
+									</div>
 								</div>
-								<a id="adicionarColuna" onclick="adicionarColuna();"><i class="fa fa-plus"></i></a>
+								<a id="adicionarColuna" onclick="adicionarColuna();"><i class="bi bi-plus-square-fill"></i> Nova coluna...</a>
+							</div>
+						</div>
+						<br>
+						<hr>
+						<br>
+						<div class="row form-group">
+							<div class="col-sm-8">
+								<label class="col-md-4 control-label h5" for="file">Selecione um arquivo CSV</label>
+								<input class="form-control" type="file" name="file" id="file" accept=".csv">
 							</div>
 							<div class="col-sm-4">
 								<h5 class="h5">Caractere separador de valores</h5>
@@ -111,13 +168,6 @@
 									<input class="form-check-input" type="radio" name="separador[]" id="separador" value="	">
 									<label class="control-label" for="separador">Tabulação</label>
 								</div>
-							</div>
-						</div>
-						<br>
-						<div class="row form-group">
-							<div class="col-sm-12">
-								<label class="col-md-4 control-label h5" for="file">Selecione um arquivo CSV</label>
-								<input class="form-control" type="file" name="file" id="file" accept=".csv">
 							</div>
 						</div>
 						<div class="row form-group">
